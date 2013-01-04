@@ -25,7 +25,7 @@
               <img src="img/loading.gif" alt="">讀取中... <button id="stop-loading" class="btn btn-danger">停止</button>
             </span>
         </h3>
-        <form id="search-form" action="#">
+        <form id="search-form" action="#" style="display:none">
           <input id="search-input" type="search" class="input-medium search-query" placeholder="要找的好朋友名字">
           <button type="submit" class="btn">搜尋</button>
         </form>

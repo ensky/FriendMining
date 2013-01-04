@@ -264,6 +264,7 @@ $('#login-btn').click(function () {
       window.isLogin = true;
       EFB.init();
       window.Router.navigate("#/main");
+      $('#search-form').show();
    } else {
       console.log('User cancelled login or did not fully authorize.');
    }
