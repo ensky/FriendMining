@@ -128,7 +128,7 @@
         <tbody>
           <% _.each(datas, function(id) { %>
           <tr>
-            <td><a href="<%= getLink(id) %>"><%= (msgs[id].message || ("<img src='" + msgs[id].picture + "'>")) %></a></td>
+            <td><a target="_blank" href="<%= getLink(id) %>"><%= (msgs[id].message || ("<img src='" + msgs[id].picture + "'>")) %></a></td>
             <!--td><%= msgs[id].created_time %></td-->
           </tr>
           <% }); %>
@@ -146,7 +146,7 @@
         <tbody>
           <% _.each(datas, function(comment, msg_id) { %>
           <tr>
-            <td><a href="<%= getLink(msg_id) %>"><%= (msgs[msg_id].message || ("<img src='" + msgs[msg_id].picture + "'>")) %></a></td>
+            <td><a target="_blank" href="<%= getLink(msg_id) %>"><%= (msgs[msg_id].message || ("<img src='" + msgs[msg_id].picture + "'>")) %></a></td>
             <td><%= comment %></td>
             <!--td><%= msgs[msg_id].created_time %></td-->
           </tr>
