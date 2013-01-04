@@ -5,6 +5,7 @@
   <title>FriendMining by Ensky</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/flick/jquery-ui-1.9.2.custom.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -24,6 +25,10 @@
               <img src="img/loading.gif" alt="">讀取中... <button id="stop-loading" class="btn btn-danger">停止</button>
             </span>
         </h3>
+        <form id="search-form" action="#">
+          <input id="search-input" type="search" class="input-medium search-query" placeholder="要找的好朋友名字">
+          <button type="submit" class="btn">搜尋</button>
+        </form>
       </div>
       
       <div id="loading-date-wrapper" style="display:none">
@@ -80,6 +85,7 @@
 + Facebook JS SDK
 + Twitter Bootstrap => CSS Framework
 + jQuery => for DOM
++ jQuery UI => from AutoComplete
 + Underscore.js => for template
 + BackBone.js => for router
 + Showdown.js => 本help頁面
@@ -147,7 +153,8 @@
 </script>
 
   <div id="fb-root"></div>
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.9/backbone-min.js"></script>

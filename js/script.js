@@ -32,7 +32,9 @@ var EFB = function () {
       like: PriorityQueue({low: true}),
       comment: PriorityQueue({low: true}),
       all: PriorityQueue({low: true})
-    }
+    },
+    names: [],
+    name_id: {}
   };
   var T = {
     'page_user': _.template($('#t-page-user').html()),
@@ -50,6 +52,13 @@ var EFB = function () {
                   likes: [],
                   comments: {}
               }
+              // name remapping
+              Data.names.push(name);
+              Data.name_id[name] = userid;
+              // search autocomplete
+              $('#search-input').autocomplete({
+                  source: Data.names
+              });
           }
       };
       var msg_id = row.id;
@@ -102,11 +111,21 @@ var EFB = function () {
       });
   }
 
+
   var init = function () {
       until = Math.floor(new Date().getTime() / 1000);
       since = new Date("2012/01/01 00:00:00");
       // since.setFullYear(2012);
       since = Math.floor(since.getTime() / 1000);
+      // search 
+      $('#search-form').submit(function () {
+          event.preventDefault();
+          var query = $('#search-input').val();
+          if ( typeof Data.name_id[query] !== 'undefined') {
+              window.Router.navigate("#/user/" + Data.name_id[query], {trigger: true});
+          }
+          return false;
+      });
       call();
   }
 
