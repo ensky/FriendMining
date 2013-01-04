@@ -5,28 +5,6 @@
   <title>FriendMining by Ensky</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
-  <style type="text/css">
-      body {
-        padding-top: 20px;
-        padding-bottom: 40px;
-      }
-
-      .footer {
-          text-align: center;
-      }
-
-      .left {
-        float: left;
-      }
-
-      .clear {
-        clear: left;
-      }
-
-      .head-pic {
-        width: 70px;
-      }
-  </style>
 </head>
 
 <body>
@@ -34,6 +12,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="#/main">Home</a></li>
+          <li><a href="#/help">這是什麼?</a></li>
         </ul>
         <div class="pull-right">
           <fb:like send="true" width="450" show_faces="true"></fb:like>
@@ -51,26 +30,64 @@
       </div>
       <hr>
 
-      <div id="page-index">
+      <div id="page-index" class="page">
           <div class="jumbotron">
             <h1>Facebook Friend Mining</h1>
             <p class="lead">
                 找出最喜歡點你讚/回應你的朋友XD
             </p>
+            <a href="#/help" class="btn btn-large btn-primary"><i class="icon-white icon-question-sign"></i> 這是什麼？</a>
             <a id="login-btn" disabled="disabled" class="btn btn-large btn-success" href="#">Start</a>
           </div>
       </div>
-      <div id="page-main" style="display:none">
-          <h3>朋友的回應</h3>
+      <div id="page-main" style="display:none" class="page">
+          <h3><i data-fold="main-comment" class="icon-minus"></i>朋友的回應 <i class="icon-comment"></i> <small>數字為留言筆數</small></h3>
           <div id="main-comment"></div>
 
-          <h3>朋友的讚</h3>
+          <h3><i data-fold="main-like" class="icon-minus"></i>朋友的讚 <i class="icon-thumbs-up"></i> <small>數字為按讚次數</small></h3>
           <div id="main-like"></div>
 
-          <h3>最關心你的朋友</h3>
+          <h3><i data-fold="main-all" class="icon-minus"></i>最關心你的朋友 <i class="icon-heart"></i> <small>數字為留言數+按讚數</small></h3>
           <div id="main-all"></div>
       </div>
-      <div id="page-user" style="display:none"></div>
+      <div id="page-user" style="display:none" class="page"></div>
+      <div id="page-help" style="display:none" class="marked page">
+### 這是什麼？
+一個像是「我的好朋友拼圖」、「誰最關心我」之類的<strike>APP</strike> 網站
+
+可以幫你找出你最好的朋友喔！（事實上是最喜歡留言、最喜歡按讚的朋友）
+
+### 那和它們差在哪裡？
+它們通常會有漂亮的圖片、還有很想讓你分享的自動貼文功能等等，
+
+這些我都沒有。
+
+取而代之的是你可以真的找出誰留了多少留言、誰按了多少讚等等資訊。
+
+### 我的資料會不會被你偷走？
+不會啦，放心。
+
+這網站我只是寫好玩的，並沒有其他目的XD
+
+不相信的話可以問問看你會網頁設計的朋友，他們看看原始碼應該就可以幫我作證了。
+
+（本網站完全經由前端javascript處理，不會對後端server送資料）
+
+### 這個網站用了什麼技術？
+其實沒什麼技術...的說
+
++ Facebook JS SDK
++ Twitter Bootstrap => CSS Framework
++ jQuery => for DOM
++ Underscore.js => for template
++ BackBone.js => for router
+
+### 你還會更新嗎
+看情況，我哪天心血來潮會寫一下
+
+想要增加什麼功能可以在下面留言板許願喔!
+
+      </div>
 
       <hr>
 
@@ -90,7 +107,7 @@
     <% _.each(users, function (user) { %>
       <div class="left head-pic">
           <p><a href="#/user/<%= user.id %>"><img title="<%= user.name %>" src="https://graph.facebook.com/<%= user.id %>/picture" alt=""></a></p>
-          <p>Count: <%= user.count %></p>
+          <p><%= user.count %></p>
       </div>
     <% }); %>
     <div class="clear"></div>
@@ -132,6 +149,7 @@
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.9/backbone-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
   <script type="text/javascript" src="js/plugins.js"></script>
   <script type="text/javascript" src="js/script.js"></script>
   <script type="text/javascript">

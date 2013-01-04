@@ -1,0 +1,9 @@
+body {
+	padding-top: 20px;
+	padding-bottom: 40px;
+}
+.footer {text-align: center;}
+.left {float: left}
+.clear {clear: both}
+.head-pic {width: 70px}
+.pointer {cursor:pointer}
