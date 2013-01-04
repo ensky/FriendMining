@@ -170,7 +170,7 @@ var EFB = function () {
 
         $('#loading-date-wrapper').show();
         untilDate = new Date(until * 1000);
-        untilDateString = untilDate.getFullYear() + "/" + untilDate.getMonth() + "/" + untilDate.getDate();
+        untilDateString = untilDate.getFullYear() + "/" + (untilDate.getMonth()+1) + "/" + untilDate.getDate();
         $('#loading-date').text(untilDateString);
         loadingCount--;
 
