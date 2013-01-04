@@ -190,26 +190,44 @@ var EFB = function () {
 var WorkspaceRouter = Backbone.Router.extend({
 
   routes: {
+    "" : "index",
     "main": "main",
-    "user/:id":   "user"
+    "user/:id":   "user",
+    "help": "help"
   },
 
   main: function () {
+    if (!isLogin) {
+      $(".page").hide();
+      $('#page-index').show();
+    } else {
+      window.Router.navigate("#/main", {trigger: true});
+    }
+  },
+
+  main: function () {
+    $(".page").hide();
     if (isLogin) {
-      $("#page-index").hide();
-      $("#page-user").hide();
       EFB.render();
       $('#page-main').show();
+    } else {
+      $("#page-index").show();
     }
   },
 
   user: function(id) {
+    $(".page").hide();
     if (isLogin) {
-      $("#page-index").hide();
-      $('#page-main').hide();
       EFB.render_user(id);
       $("#page-user").show();
+    } else {
+      $("#page-index").show();
     }
+  },
+
+  help: function () {
+      $(".page").hide();
+      $('#page-help').show();
   }
 
 });
