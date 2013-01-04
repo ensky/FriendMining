@@ -123,6 +123,7 @@ var EFB = function () {
           var query = $('#search-input').val();
           if ( typeof Data.name_id[query] !== 'undefined') {
               window.Router.navigate("#/user/" + Data.name_id[query], {trigger: true});
+              $('#search-input').val('');
           }
           return false;
       });
