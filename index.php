@@ -37,8 +37,8 @@
             <p class="lead">
                 找出最喜歡點你讚/回應你的朋友XD
             </p>
+            <a id="login-btn" disabled="disabled" class="btn btn-large btn-success" href="#"><i class="icon-white icon-play"></i> 開始玩</a>
             <a href="#/help" class="btn btn-large btn-primary"><i class="icon-white icon-question-sign"></i> 這是什麼？</a>
-            <a id="login-btn" disabled="disabled" class="btn btn-large btn-success" href="#"><i class="icon-white icon-play"></i> Start</a>
           </div>
       </div>
       <div id="page-main" style="display:none" class="page">
