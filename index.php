@@ -37,7 +37,7 @@
                 找出最喜歡點你讚/回應你的朋友XD
             </p>
             <a href="#/help" class="btn btn-large btn-primary"><i class="icon-white icon-question-sign"></i> 這是什麼？</a>
-            <a id="login-btn" disabled="disabled" class="btn btn-large btn-success" href="#">Start</a>
+            <a id="login-btn" disabled="disabled" class="btn btn-large btn-success" href="#"><i class="icon-white icon-play"></i> Start</a>
           </div>
       </div>
       <div id="page-main" style="display:none" class="page">
@@ -81,8 +81,9 @@
 + jQuery => for DOM
 + Underscore.js => for template
 + BackBone.js => for router
++ Showdown.js => 本help頁面
 
-### 你還會更新嗎
+### 你還會更新嗎？
 看情況，我哪天心血來潮會寫一下
 
 想要增加什麼功能可以在下面留言板許願喔!
