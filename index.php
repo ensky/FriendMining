@@ -1,4 +1,11 @@
-<!doctype html>
+<?php
+  if (strpos($_SERVER['REQUEST_URI'], "-dev") !== False) {
+      if ($_SERVER['REMOTE_ADDR'] !== '1.171.2.53') {
+          header('location: http://ensky.tw/FriendMining/');
+          exit;
+      }
+  }
+?><!doctype html>
 <html lang="zh_tw" xmlns:fb="http://ogp.me/ns/fb#">
 <head>
   <meta charset="utf-8">
