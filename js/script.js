@@ -226,7 +226,6 @@ var EFB = function () {
   });
 
   var call_stop = function () {
-      loadingCount = 0;
       $('#loading-gif').hide();
       $('#start-loading').show();
       $('#stop-loading').hide();
@@ -236,10 +235,10 @@ var EFB = function () {
     if (stop_loading) {
         call_stop();
     } else {
+        loadingCount++;
         $('#loading-gif').show();
         $('#start-loading').hide();
         $('#stop-loading').show();
-        loadingCount++;
         FB.api('/'+ window.wallID +'/posts?fields=message,likes,comments,link,picture&limit='+ grab_limit +'&until=' + until, function(d) {
             try {
               if (typeof d.paging.next !== 'undefined') {
@@ -255,10 +254,12 @@ var EFB = function () {
               untilDateString = untilDate.getFullYear() + "/" + (untilDate.getMonth()+1) + "/" + untilDate.getDate();
               $('#loading-date').text(untilDateString);
               loadingCount--;
-
-              if (loadingCount == 0) {
-                  call_stop();
-              }
+              // 等等再判斷，避免錯誤中止問題
+              setTimeout(function () {
+                if (loadingCount == 0) {
+                    call_stop();
+                }
+              }, 50);
             } catch (e) {
                 call_stop();
             }
