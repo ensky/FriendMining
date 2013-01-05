@@ -59,6 +59,10 @@
               </form>
             </div>
       </div>
+      <div class="display-when-render alert alert-info" style="display:none">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        Ensky小提醒：好像很多人不知道其實你可以點好友的圖片進去看他的回應＆讚...
+      </div>
       <hr>
 
       <div id="page-index" class="page">
