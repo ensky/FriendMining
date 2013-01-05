@@ -39,11 +39,18 @@
       <div id="page-index" class="page">
           <div class="jumbotron">
             <h1>Facebook Friend Mining</h1>
-            <p class="lead">
-                找出最喜歡點你讚/回應你的朋友XD
-            </p>
-            <a id="login-btn" disabled="disabled" class="btn btn-large btn-success" href="#"><i class="icon-white icon-play"></i> 開始玩</a>
-            <a href="#/help" class="btn btn-large btn-primary"><i class="icon-white icon-question-sign"></i> 這是什麼？</a>
+            <form id="init-form" action="#">
+              <p class="lead">
+                找出最喜歡點你讚/回應你的朋友XD <br><br>
+                <i class="icon-question-sign"></i>要從什麼時候開始統計呢？<br>
+              <label style="display:inline"><input type="radio" name="since" value="week" checked="checked">一週前</label>
+              <label style="display:inline"><input type="radio" name="since" value="month">這個月1號</label>
+              <label style="display:inline"><input type="radio" name="since" value="year">一年前</label>
+              <label style="display:inline"><input type="radio" name="since" value="forever">跑到世界末日還不停止</label>
+              </p>
+              <button type="submit" id="login-btn" disabled="disabled" class="btn btn-large btn-success"><i class="icon-white icon-play"></i> 開始玩</button>
+              <a href="#/help" class="btn btn-large btn-primary"><i class="icon-white icon-question-sign"></i> 這是什麼？</a>
+            </form>
           </div>
       </div>
       <div id="page-main" style="display:none" class="page">
@@ -85,7 +92,7 @@
 + Facebook JS SDK
 + Twitter Bootstrap => CSS Framework
 + jQuery => for DOM
-+ jQuery UI => from AutoComplete
++ jQuery UI => for AutoComplete
 + Underscore.js => for template
 + BackBone.js => for router
 + Showdown.js => 本help頁面
@@ -96,6 +103,7 @@
 想要增加什麼功能可以在下面留言板許願喔!
 
 ### 開發紀錄
++ v0.3 - add 抓取時間範圍
 + v0.2 - add 本說明文件、搜尋好友功能
 + v0.1 - add 基本功能
       </div>

@@ -24,7 +24,7 @@ window.isLogin = false;
      }(document, /*debug*/ false));
 
 var EFB = function () {
-  var until, since;
+  var until, since, until_this_round, grab_limit;
   var Data = {
     msgs: {},
     users: {/*name, likes, comments*/},
@@ -61,6 +61,18 @@ var EFB = function () {
               });
           }
       };
+
+      // since判斷
+      var filterCreateTime = function (created_time) {
+          var ct = (new Date(created_time)) / 1000;
+          if (ct >= since) {
+              if (ct < until_this_round)
+                  until_this_round = ct;
+              return true;
+          } else {
+              return false;
+          }
+      };
       var msg_id = row.id;
       Data.msgs[msg_id] = Data.msgs[msg_id] || {
           picture: row.picture || '',
@@ -69,35 +81,37 @@ var EFB = function () {
           created_time: new Date(row.created_time)
       };
 
-      datas = type == 'comment' ? row.comments.data : row.likes.data;
-      rankobj = Data.ranks;
-      $.each(datas, function (index, d) {
-          var user_id;
-          if ( type == 'comment' ) {
-              user_id = d.from.id;
-              if (user_id != FBID) {
-                initUser(user_id, d.from.name);
-                userobj = Data.users[user_id];
-                userobj['comments'][msg_id] = d.message;
-                rankobj.comment.remove(user_id);
-                rankobj.comment.push(user_id, Object.keys(userobj['comments']).length);
-              }
-          } else {
-              user_id = d.id;
-              if (user_id != FBID) {
-                initUser(user_id, d.name);
-                userobj = Data.users[user_id];
-                userobj['likes'].push(msg_id);
-                rankobj.like.remove(user_id);
-                rankobj.like.push(user_id, Object.keys(userobj['likes']).length);
-              }
-          }
+      if ( filterCreateTime(row.created_time) ) {
+        datas = type == 'comment' ? row.comments.data : row.likes.data;
+        rankobj = Data.ranks;
+        $.each(datas, function (index, d) {
+            var user_id;
+            if ( type == 'comment' ) {
+                user_id = d.from.id;
+                if (user_id != FBID) {
+                  initUser(user_id, d.from.name);
+                  userobj = Data.users[user_id];
+                  userobj['comments'][msg_id] = d.message;
+                  rankobj.comment.remove(user_id);
+                  rankobj.comment.push(user_id, Object.keys(userobj['comments']).length);
+                }
+            } else {
+                user_id = d.id;
+                if (user_id != FBID) {
+                  initUser(user_id, d.name);
+                  userobj = Data.users[user_id];
+                  userobj['likes'].push(msg_id);
+                  rankobj.like.remove(user_id);
+                  rankobj.like.push(user_id, Object.keys(userobj['likes']).length);
+                }
+            }
 
-          if (user_id != FBID) {
-            rankobj.all.remove(user_id);
-            rankobj.all.push(user_id, Object.keys(userobj['comments']).length + Object.keys(userobj['likes']).length);
-          }
-      });
+            if (user_id != FBID) {
+              rankobj.all.remove(user_id);
+              rankobj.all.push(user_id, Object.keys(userobj['comments']).length + Object.keys(userobj['likes']).length);
+            }
+        });
+      }
   }
 
   var joinData = function (datas) {
@@ -112,11 +126,31 @@ var EFB = function () {
   }
 
 
-  var init = function () {
+  var init = function (form_since) {
       until = Math.floor(new Date().getTime() / 1000);
-      since = new Date("2012/01/01 00:00:00");
-      // since.setFullYear(2012);
-      since = Math.floor(since.getTime() / 1000);
+      since = new Date();
+      switch (form_since) {
+        case "week":
+          since.setTime( since.getTime() - 60*60*24*7 * 1000 );
+          grab_limit = 30;
+          break;
+        case "month":
+          since.setDate(1);
+          grab_limit = 50;
+          break;
+        case "year":
+          since.setFullYear(since.getFullYear() - 1);
+          grab_limit = 80;
+          break;
+        case "forever":
+          since = null;
+          grab_limit = 100;
+          break;
+      }
+      until_this_round = (new Date().getTime()) / 1000;
+      if ( since ) {
+        since = Math.floor(since.getTime() / 1000);
+      }
       // search 
       $('#search-form').submit(function () {
           event.preventDefault();
@@ -178,10 +212,10 @@ var EFB = function () {
   var call = function () {
     $('#loading-gif').show();
     loadingCount++;
-    FB.api('/me/posts?fields=message,likes,comments,link,picture&limit=100&until=' + until, function(d) {
+    FB.api('/me/posts?fields=message,likes,comments,link,picture&limit='+ grab_limit +'&until=' + until, function(d) {
         if (typeof d.paging.next !== 'undefined') {
             until = d.paging.next.match(/until=(\d+)/)[1];
-            if ( /*until > since &&*/ !stop_loading) {
+            if ( (!since || until > since) && !stop_loading) {
                 call();
             }
         }
@@ -189,7 +223,7 @@ var EFB = function () {
         render();
 
         $('#loading-date-wrapper').show();
-        untilDate = new Date(until * 1000);
+        untilDate = new Date(until_this_round * 1000);
         untilDateString = untilDate.getFullYear() + "/" + (untilDate.getMonth()+1) + "/" + untilDate.getDate();
         $('#loading-date').text(untilDateString);
         loadingCount--;
@@ -217,21 +251,13 @@ var WorkspaceRouter = Backbone.Router.extend({
   },
 
   main: function () {
-    if (!isLogin) {
-      $(".page").hide();
-      $('#page-index').show();
-    } else {
-      window.Router.navigate("#/main", {trigger: true});
-    }
-  },
-
-  main: function () {
     $(".page").hide();
     if (isLogin) {
       EFB.render();
       $('#page-main').show();
     } else {
       $("#page-index").show();
+      window.Router.navigate("");
     }
   },
 
@@ -242,6 +268,7 @@ var WorkspaceRouter = Backbone.Router.extend({
       $("#page-user").show();
     } else {
       $("#page-index").show();
+      window.Router.navigate("");
     }
   },
 
@@ -254,7 +281,9 @@ var WorkspaceRouter = Backbone.Router.extend({
 window.Router = new WorkspaceRouter;
 Backbone.history.start();
 
-$('#login-btn').click(function () {
+$('#init-form').submit(function () {
+  event.preventDefault();
+  var since = $(this).find('input[name="since"]:checked').val();
   FB.login(function(response) {
    if (response.authResponse) {
       FB.api('/me?fields=id', function (d) {
@@ -262,11 +291,12 @@ $('#login-btn').click(function () {
       });
       
       window.isLogin = true;
-      EFB.init();
+      EFB.init(since);
       window.Router.navigate("#/main");
       $('#search-form').show();
    } else {
       console.log('User cancelled login or did not fully authorize.');
    }
   }, {scope: 'read_stream'});
+  return false;
 });
