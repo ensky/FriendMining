@@ -68,7 +68,7 @@ var EFB = function () {
 
       // since判斷
       var filterCreateTime = function (created_time) {
-          var ct = (new Date(created_time)) / 1000;
+          var ct = (new Date(created_time.substr(0, 10))) / 1000;
           if (ct >= since) {
               if (ct < until_this_round)
                   until_this_round = ct;
