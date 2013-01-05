@@ -1,3 +1,7 @@
+/*
+ * Author: Ensky Lin(http://www.ensky.tw/)
+ * Licence: http://creativecommons.org/licenses/by-nc-sa/3.0/
+ */
 window.isLogin = false;
     window.fbAsyncInit = function() {
       // init the FB JS SDK

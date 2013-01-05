@@ -112,7 +112,10 @@
 
       <div class="footer">
         <div class="fb-comments" data-href="http://ensky.tw/FriendMining" data-width="1170" data-num-posts="5"></div>
-        <p>&copy; Ensky Lin 2012</p>
+        <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh_TW">
+          <img alt="創用 CC 授權條款" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a>
+          <br />
+          <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">FriendMining</span>由<a xmlns:cc="http://creativecommons.org/ns#" href="http://www.ensky.tw" property="cc:attributionName" rel="cc:attributionURL">Ensky Lin</a>製作。
       </div>
   </div>
 <script type="text/template" id="t-page-user">
