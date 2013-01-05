@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/flick/jquery-ui-1.9.2.custom.min.css">
+  <link rel="stylesheet" href="css/chosen.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -21,39 +22,57 @@
         </div>
         <h3 class="muted">
             Friend Mining
-            <span id="loading-gif" style="display:none">
-              <img src="img/loading.gif" alt="">讀取中... <button id="stop-loading" class="btn btn-danger">停止</button>
-            </span>
         </h3>
-        <form id="search-form" action="#" style="display:none">
-          <input id="search-input" type="search" class="input-medium search-query" placeholder="要找的好朋友名字">
-          <button type="submit" class="btn">搜尋</button>
-        </form>
       </div>
       
-      <div id="loading-date-wrapper" style="display:none">
-        <h4>資料來源：從<span id="loading-date"></span>到現在的塗鴉牆訊息</h4>
+      <div class="display-when-login row" style="display:none">
+            <div class="span6">
+              <form action="#" id="setting-form">
+                <p>
+                  <br>
+                  設定抓取時間
+                  <label style="display:inline"><input type="radio" name="since" value="week" checked="checked">一週前</label>
+                  <label style="display:inline"><input type="radio" name="since" value="month">這個月1號</label>
+                  <label style="display:inline"><input type="radio" name="since" value="year">一年前</label>
+                  <label style="display:inline"><input type="radio" name="since" value="forever">跑到世界末日還不停止</label>
+                </p>
+                <p>
+                  抓誰的塗鴉牆
+                  <select id="wall-source">
+                    <option value="me">我</option>
+                  </select>
+                  <button id="start-loading" class="btn btn-success" type="submit">開始</button>
+                  <button id="stop-loading" class="btn btn-danger" style="display:none" type="button">停止</button>
+                  <span id="loading-gif" style="display:none">
+                    <img src="img/loading.gif" alt="">讀取中...
+                  </span>
+                </p>
+              </form>
+            </div>
+            <div class="display-when-render span5" style="display:none">
+              <h4>
+                資料來源：從<span id="loading-date"></span>到現在的塗鴉牆訊息
+              </h4>
+              <form id="search-form" action="#">
+                搜尋好友的推文：<input id="search-input" type="search" class="input-medium search-query" placeholder="要找的好朋友名字">
+                <button type="submit" class="btn btn-primary">搜尋</button>
+              </form>
+            </div>
       </div>
       <hr>
 
       <div id="page-index" class="page">
           <div class="jumbotron">
             <h1>Facebook Friend Mining</h1>
-            <form id="init-form" action="#">
-              <p class="lead">
-                找出最喜歡點你讚/回應你的朋友XD <br><br>
-                <i class="icon-question-sign"></i>要從什麼時候開始統計呢？<br>
-              <label style="display:inline"><input type="radio" name="since" value="week" checked="checked">一週前</label>
-              <label style="display:inline"><input type="radio" name="since" value="month">這個月1號</label>
-              <label style="display:inline"><input type="radio" name="since" value="year">一年前</label>
-              <label style="display:inline"><input type="radio" name="since" value="forever">跑到世界末日還不停止</label>
-              </p>
-              <button type="submit" id="login-btn" disabled="disabled" class="btn btn-large btn-success"><i class="icon-white icon-play"></i> 開始玩</button>
-              <a href="#/help" class="btn btn-large btn-primary"><i class="icon-white icon-question-sign"></i> 這是什麼？</a>
-            </form>
+            <p class="lead">
+              找出最喜歡點你讚/回應你的朋友XD <br>
+            </p>
+            <a href="#/main" id="login-btn" disabled="disabled" class="btn btn-large btn-success"><i class="icon-white icon-play"></i> 開始玩</a>
+            <a href="#/help" class="btn btn-large btn-primary"><i class="icon-white icon-question-sign"></i> 這是什麼？</a>
           </div>
       </div>
       <div id="page-main" style="display:none" class="page">
+        <div class="display-when-render" style="display:none">
           <h3><i data-fold="main-comment" class="icon-minus"></i>朋友的回應 <i class="icon-comment"></i> <small>數字為留言筆數</small></h3>
           <div id="main-comment"></div>
 
@@ -62,6 +81,7 @@
 
           <h3><i data-fold="main-all" class="icon-minus"></i>最關心你的朋友 <i class="icon-heart"></i> <small>數字為留言數+按讚數</small></h3>
           <div id="main-all"></div>
+        </div>
       </div>
       <div id="page-user" style="display:none" class="page"></div>
       <div id="page-help" style="display:none" class="marked page">
@@ -96,6 +116,7 @@
 + Underscore.js => for template
 + BackBone.js => for router
 + Showdown.js => 本help頁面
++ Chosen => 朋友塗鴉牆選擇
 
 ### 你還會更新嗎？
 看情況，我哪天心血來潮會寫一下
@@ -103,6 +124,7 @@
 想要增加什麼功能可以在下面留言板許願喔!
 
 ### 開發紀錄
++ v0.5 - add 看朋友塗鴉牆功能
 + v0.4 - fix Firefox and IE9 bug
 + v0.3 - add 抓取時間範圍
 + v0.2 - add 本說明文件、搜尋好友功能
@@ -168,12 +190,13 @@
 </script>
 
   <div id="fb-root"></div>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.9/backbone-min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
+  <script type="text/javascript" src="js/lib/jquery.min.js"></script>
+  <script type="text/javascript" src="js/lib/jquery-ui.min.js"></script>
+  <script src="js/lib/bootstrap.min.js"></script>
+  <script src="js/lib/underscore-min.js"></script>
+  <script src="js/lib/backbone-min.js"></script>
+  <script src="js/lib/showdown.min.js"></script>
+  <script src="js/lib/chosen.jquery.min.js"></script>
   <script type="text/javascript" src="js/plugins.js"></script>
   <script type="text/javascript" src="js/script.js"></script>
   <script type="text/javascript">

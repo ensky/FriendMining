@@ -29,6 +29,8 @@ window.isLogin = false;
 
 var EFB = function () {
   var until, since, until_this_round, grab_limit;
+  var loadingCount, stop_loading;
+  var Friends = {kid: {}, kname: {}};
   var Data = {
     msgs: {},
     users: {/*name, likes, comments*/},
@@ -47,6 +49,57 @@ var EFB = function () {
     'comment': _.template($('#t-comment').html())
   };
   window.Data = Data;
+
+  var init_wall = function (form_since) {
+      Data = {
+        msgs: {},
+        users: {/*name, likes, comments*/},
+        ranks: {
+          like: PriorityQueue({low: true}),
+          comment: PriorityQueue({low: true}),
+          all: PriorityQueue({low: true})
+        },
+        names: [],
+        name_id: {}
+      };
+      loadingCount=0;
+      stop_loading=0;
+      until = Math.floor(new Date().getTime() / 1000);
+      since = new Date();
+      switch (form_since) {
+        case "week":
+          since.setTime( since.getTime() - 60*60*24*7 * 1000 );
+          grab_limit = 30;
+          break;
+        case "month":
+          since.setDate(1);
+          grab_limit = 50;
+          break;
+        case "year":
+          since.setFullYear(since.getFullYear() - 1);
+          grab_limit = 80;
+          break;
+        case "forever":
+          since = null;
+          grab_limit = 100;
+          break;
+      }
+      until_this_round = (new Date().getTime()) / 1000;
+      if ( since ) {
+        since = Math.floor(since.getTime() / 1000);
+      }
+      // search 
+      $('#search-form').submit(function () {
+          // event.preventDefault();
+          var query = $('#search-input').val();
+          if ( typeof Data.name_id[query] !== 'undefined') {
+              window.Router.navigate("#/user/" + Data.name_id[query], {trigger: true});
+              $('#search-input').val('');
+          }
+          return false;
+      });
+      call();
+  }
 
   var parseCommentLike = function (type, row) {
       var initUser = function (userid, name) {
@@ -92,7 +145,7 @@ var EFB = function () {
             var user_id;
             if ( type == 'comment' ) {
                 user_id = d.from.id;
-                if (user_id != FBID) {
+                if (user_id != window.wallID) {
                   initUser(user_id, d.from.name);
                   userobj = Data.users[user_id];
                   userobj['comments'][msg_id] = d.message;
@@ -101,7 +154,7 @@ var EFB = function () {
                 }
             } else {
                 user_id = d.id;
-                if (user_id != FBID) {
+                if (user_id != window.wallID) {
                   initUser(user_id, d.name);
                   userobj = Data.users[user_id];
                   userobj['likes'].push(msg_id);
@@ -110,7 +163,7 @@ var EFB = function () {
                 }
             }
 
-            if (user_id != FBID) {
+            if (user_id != window.wallID) {
               rankobj.all.remove(user_id);
               rankobj.all.push(user_id, Object.keys(userobj['comments']).length + Object.keys(userobj['likes']).length);
             }
@@ -127,45 +180,6 @@ var EFB = function () {
               parseCommentLike("like", d);
           }
       });
-  }
-
-
-  var init = function (form_since) {
-      until = Math.floor(new Date().getTime() / 1000);
-      since = new Date();
-      switch (form_since) {
-        case "week":
-          since.setTime( since.getTime() - 60*60*24*7 * 1000 );
-          grab_limit = 30;
-          break;
-        case "month":
-          since.setDate(1);
-          grab_limit = 50;
-          break;
-        case "year":
-          since.setFullYear(since.getFullYear() - 1);
-          grab_limit = 80;
-          break;
-        case "forever":
-          since = null;
-          grab_limit = 100;
-          break;
-      }
-      until_this_round = (new Date().getTime()) / 1000;
-      if ( since ) {
-        since = Math.floor(since.getTime() / 1000);
-      }
-      // search 
-      $('#search-form').submit(function () {
-          // event.preventDefault();
-          var query = $('#search-input').val();
-          if ( typeof Data.name_id[query] !== 'undefined') {
-              window.Router.navigate("#/user/" + Data.name_id[query], {trigger: true});
-              $('#search-input').val('');
-          }
-          return false;
-      });
-      call();
   }
 
   var render_user = function (id) {
@@ -207,36 +221,72 @@ var EFB = function () {
       $("#main-all").html(T.user({users: parse_result(Data.ranks.all.result())}));
   };
 
-  var loadingCount = 0,
-      stop_loading = 0;
-
   $('#stop-loading').click(function () {
       stop_loading = 1;
   });
-  var call = function () {
-    $('#loading-gif').show();
-    loadingCount++;
-    FB.api('/me/posts?fields=message,likes,comments,link,picture&limit='+ grab_limit +'&until=' + until, function(d) {
-        if (typeof d.paging.next !== 'undefined') {
-            until = d.paging.next.match(/until=(\d+)/)[1];
-            if ( (!since || until > since) && !stop_loading) {
-                call();
-            }
-        }
-        joinData(d.data);
-        render();
 
-        $('#loading-date-wrapper').show();
-        untilDate = new Date(until_this_round * 1000);
-        untilDateString = untilDate.getFullYear() + "/" + (untilDate.getMonth()+1) + "/" + untilDate.getDate();
-        $('#loading-date').text(untilDateString);
-        loadingCount--;
-
-        if (loadingCount == 0) {
-          $('#loading-gif').hide();
-        }
-    });
+  var call_stop = function () {
+      loadingCount = 0;
+      $('#loading-gif').hide();
+      $('#start-loading').show();
+      $('#stop-loading').hide();
   }
+
+  var call = function () {
+    if (stop_loading) {
+        call_stop();
+    } else {
+        $('#loading-gif').show();
+        $('#start-loading').hide();
+        $('#stop-loading').show();
+        loadingCount++;
+        FB.api('/'+ window.wallID +'/posts?fields=message,likes,comments,link,picture&limit='+ grab_limit +'&until=' + until, function(d) {
+            try {
+              if (typeof d.paging.next !== 'undefined') {
+                  until = d.paging.next.match(/until=(\d+)/)[1];
+                  if ( !since || until > since ) {
+                      call();
+                  }
+              }
+              joinData(d.data);
+              render();
+
+              untilDate = new Date(until_this_round * 1000);
+              untilDateString = untilDate.getFullYear() + "/" + (untilDate.getMonth()+1) + "/" + untilDate.getDate();
+              $('#loading-date').text(untilDateString);
+              loadingCount--;
+
+              if (loadingCount == 0) {
+                  call_stop();
+              }
+            } catch (e) {
+                call_stop();
+            }
+        });
+    }
+  }
+
+  var init = function () {
+      FB.api('/me?fields=id,friends', function (d) {
+          window.wallID = d.id;
+          var f = d.friends.data;
+          var $new_wall_source = $('<select id="wall-source"><option value="'+ d.id +'" selected="selected">我</option></select>');
+          _.each(f, function (row) {
+              Friends.kid[row.id] = row.name;
+              Friends.kname[row.name] = row.id;
+              $new_wall_source.append('<option value="'+ row.id+ '">'+ row.name +'</option>');
+          });
+          $('#wall-source').replaceWith($new_wall_source)
+          $('#wall-source').chosen();
+          $('#setting-form').submit(function () {
+              var form_since = $(this).find('input[name="since"]:checked').val();
+              window.wallID = $('#wall-source').val();
+              init_wall(form_since);
+              $('.display-when-render').show();
+              return false;
+          });
+      });
+  };
 
   return {
     init: init,
@@ -285,22 +335,19 @@ var WorkspaceRouter = Backbone.Router.extend({
 window.Router = new WorkspaceRouter;
 Backbone.history.start();
 
-$('#init-form').submit(function () {
-  // event.preventDefault();
-  var since = $(this).find('input[name="since"]:checked').val();
+$('#login-btn').click(function () {
   FB.login(function(response) {
    if (response.authResponse) {
       FB.api('/me?fields=id', function (d) {
-          window.FBID = d.id;
+          window.window.wallID = d.id;
       });
-      
+
       window.isLogin = true;
-      EFB.init(since);
+      EFB.init();
       window.Router.navigate("#/main");
-      $('#search-form').show();
+      $('.display-when-login').show();
    } else {
       console.log('User cancelled login or did not fully authorize.');
    }
   }, {scope: 'read_stream'});
-  return false;
 });
