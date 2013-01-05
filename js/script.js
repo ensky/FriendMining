@@ -157,7 +157,7 @@ var EFB = function () {
       }
       // search 
       $('#search-form').submit(function () {
-          event.preventDefault();
+          // event.preventDefault();
           var query = $('#search-input').val();
           if ( typeof Data.name_id[query] !== 'undefined') {
               window.Router.navigate("#/user/" + Data.name_id[query], {trigger: true});
@@ -286,7 +286,7 @@ window.Router = new WorkspaceRouter;
 Backbone.history.start();
 
 $('#init-form').submit(function () {
-  event.preventDefault();
+  // event.preventDefault();
   var since = $(this).find('input[name="since"]:checked').val();
   FB.login(function(response) {
    if (response.authResponse) {
