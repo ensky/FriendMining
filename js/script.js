@@ -205,20 +205,72 @@ var EFB = function () {
   };
 
   var render = function () {
+      var id_to_obj = function (id) {
+          if (typeof Data.users[id] !== 'undefined')
+            return {
+                id: id,
+                name: Data.users[id].name,
+                comments: _.size(Data.users[id].comments),
+                likes: Data.users[id].likes.length,
+                sum: (_.size(Data.users[id].comments) + Data.users[id].likes.length)
+            };
+          else
+            return {
+                id: id,
+                name: Friends.kid[id],
+                comments: 0,
+                likes: 0,
+                sum: 0
+            }; 
+      };
       var parse_result = function (results) {
           var r = [];
           _.each(results, function (result) {
-              r.push({
-                  id: result.object,
-                  name: Data.users[result.object].name,
-                  count: result.priority
-              });
+              r.push(id_to_obj(result.object));
           });
           return r;
       };
-      $("#main-like").html(T.user({users: parse_result(Data.ranks.like.result())}));
-      $("#main-comment").html(T.user({users: parse_result(Data.ranks.comment.result())}));
-      $("#main-all").html(T.user({users: parse_result(Data.ranks.all.result())}));
+      var generate_dislike = function () {
+          if (window.wallID != window.myID)
+              return [];
+          var second_part = [],
+              first_part = [],
+              all = {};
+          _.each(Data.users, function (obj, uid) {
+              all[uid] = true;
+              // second_part.push(id_to_obj(obj.object));
+          });
+          // console.log(Friends.kid);
+
+          _.each(Friends.kid, function (name, uid) {
+              if (typeof all[uid] === 'undefined') {
+                  first_part.push(id_to_obj(uid));
+              }
+          });
+          // console.log(first_part);
+          return first_part.concat(second_part);
+      };
+      var d = {
+          like: parse_result(Data.ranks.like.result()),
+          comment: parse_result(Data.ranks.comment.result()),
+          all: parse_result(Data.ranks.all.result()),
+          dislike: generate_dislike()
+      };
+      $("#main-like").html(T.user({users: d.like }));
+      $("#main-comment").html(T.user({users: d.comment }));
+      $("#main-all").html(T.user({users: d.all }));
+      $("#main-dislike").html(T.user({users: d.dislike }));
+
+      $('#like-count').text(d.like.length);
+      $('#comment-count').text(d.comment.length);
+      $('#all-count').text(d.all.length);
+      $('#dislike-count').text(d.dislike.length);
+
+      if (d.dislike.length == 0) {
+        $('#main-dislike').parent().hide();
+      } else {
+        $('#main-dislike').parent().show();
+      }
   };
 
   $('#stop-loading').click(function () {
@@ -340,7 +392,8 @@ $('#login-btn').click(function () {
   FB.login(function(response) {
    if (response.authResponse) {
       FB.api('/me?fields=id', function (d) {
-          window.window.wallID = d.id;
+          window.wallID = d.id;
+          window.myID = d.id;
       });
 
       window.isLogin = true;

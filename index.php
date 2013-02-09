@@ -1,6 +1,6 @@
 <?php
   if (strpos($_SERVER['REQUEST_URI'], "-dev") !== False) {
-      if ($_SERVER['REMOTE_ADDR'] !== '1.171.2.53') {
+      if ($_SERVER['REMOTE_ADDR'] !== '118.166.144.55') {
           header('location: http://ensky.tw/FriendMining/');
           exit;
       }
@@ -83,15 +83,26 @@
           </div>
       </div>
       <div id="page-main" style="display:none" class="page">
-        <div class="display-when-render" style="display:none">
-          <h3><i data-fold="main-comment" class="icon-minus"></i>朋友的回應 <i class="icon-comment"></i> <small>數字為留言筆數</small></h3>
-          <div id="main-comment"></div>
+        <div class="display-when-render row" style="display:none">
+          <div class="span3">
+            <h3><i data-fold="main-comment" class="icon-minus"></i>最多回應(<span id="comment-count"></span>) <i class="icon-comment"></i></h3>
+            <div id="main-comment"></div>
+          </div>
 
-          <h3><i data-fold="main-like" class="icon-minus"></i>朋友的讚 <i class="icon-thumbs-up"></i> <small>數字為按讚次數</small></h3>
-          <div id="main-like"></div>
+          <div class="span3">
+            <h3><i data-fold="main-like" class="icon-minus"></i>最多讚(<span id="like-count"></span>) <i class="icon-thumbs-up"></i></h3>
+            <div id="main-like"></div>
+          </div>
 
-          <h3><i data-fold="main-all" class="icon-minus"></i>最關心你的朋友 <i class="icon-heart"></i> <small>數字為留言數+按讚數</small></h3>
-          <div id="main-all"></div>
+          <div class="span3">
+            <h3><i data-fold="main-all" class="icon-minus"></i>最關心你(<span id="all-count"></span>) <i class="icon-star"></i></h3>
+            <div id="main-all"></div>
+          </div>
+
+          <div class="span3">
+            <h3><i data-fold="main-dislike" class="icon-minus"></i>沒在follow你(<span id="dislike-count"></span>) <i class="icon-star-empty"></i></h3>
+            <div id="main-dislike"></div>
+          </div>
         </div>
       </div>
       <div id="page-user" style="display:none" class="page"></div>
@@ -159,14 +170,34 @@
   <h3><%= name %> 說的讚</h3>
   <div id="user-like"></div>
 </script>
+
 <script id="t-user" type="text/template">
-    <% _.each(users, function (user) { %>
-      <div class="left head-pic">
-          <p><a href="#/user/<%= user.id %>"><img title="<%= user.name %>" src="https://graph.facebook.com/<%= user.id %>/picture" alt=""></a></p>
-          <p><%= user.count %></p>
-      </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th width="60px"></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% _.each(users, function (user, i) { %>
+      <tr>
+        <td>
+          <p>No. <%= (i+1) %></p>
+          <p><%= user.name %></p>
+        </td>
+        <td><img title="<%= user.name %>" src="https://graph.facebook.com/<%= user.id %>/picture" alt=""></td>
+        <td>
+          <%= user.comments %><i class="icon-comment"></i><br>
+          <%= user.likes %><i class="icon-thumbs-up"></i>
+        </td>
+        <td><% if (user.sum > 0) { %><a class="btn btn-primary" href="#/user/<%= user.id %>">檢視</a><% } %></td>
+      </tr>
     <% }); %>
-    <div class="clear"></div>
+    </tbody>
+  </table>
 </script>
 <script id="t-like" type="text/template">
     <table class="table table-striped">
