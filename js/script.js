@@ -72,7 +72,7 @@ var EFB = function () {
           grab_limit = 30;
           break;
         case "month":
-          since.setDate(1);
+          since.setTime( since.getTime() - 60*60*24*30 * 1000 );
           grab_limit = 50;
           break;
         case "year":

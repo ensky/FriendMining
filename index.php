@@ -39,9 +39,9 @@
                   <br>
                   設定抓取時間
                   <label style="display:inline"><input type="radio" name="since" value="week" checked="checked">一週前</label>
-                  <label style="display:inline"><input type="radio" name="since" value="month">這個月1號</label>
+                  <label style="display:inline"><input type="radio" name="since" value="month">一個月前</label>
                   <label style="display:inline"><input type="radio" name="since" value="year">一年前</label>
-                  <label style="display:inline"><input type="radio" name="since" value="forever">跑到世界末日還不停止</label>
+                  <label style="display:inline"><input type="radio" name="since" value="forever">抓完所有塗鴉牆訊息</label>
                 </p>
                 <p>
                   抓誰的塗鴉牆
