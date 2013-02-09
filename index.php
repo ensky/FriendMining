@@ -66,10 +66,6 @@
               </form>
             </div>
       </div>
-      <div class="display-when-render alert alert-info" style="display:none">
-        <a class="close" data-dismiss="alert" href="#">&times;</a>
-        Ensky小提醒：好像很多人不知道其實你可以點好友的圖片進去看他的回應＆讚...
-      </div>
       <hr>
 
       <div id="page-index" class="page">
@@ -186,7 +182,7 @@
       <tr>
         <td>
           <p>No. <%= (i+1) %></p>
-          <p><%= user.name %></p>
+          <p><a href="https://www.facebook.com/<%= user.id %>" target="_blank" title="去<%= user.name %>的塗鴉牆"><%= user.name %></a></p>
         </td>
         <td><img title="<%= user.name %>" src="https://graph.facebook.com/<%= user.id %>/picture" alt=""></td>
         <td>
