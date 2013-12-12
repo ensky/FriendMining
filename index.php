@@ -230,7 +230,7 @@
   <script src="js/lib/showdown.min.js"></script>
   <script src="js/lib/chosen.jquery.min.js"></script>
   <script type="text/javascript" src="js/plugins.js"></script>
-  <script type="text/javascript" src="js/script-1.0.js"></script>
+  <script type="text/javascript" src="js/script-1.1.js"></script>
   <script type="text/javascript">
 
   var _gaq = _gaq || [];
