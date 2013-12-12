@@ -1,11 +1,4 @@
-<?php
-  if (strpos($_SERVER['REQUEST_URI'], "-dev") !== False) {
-      if ($_SERVER['REMOTE_ADDR'] !== '118.166.144.55') {
-          header('location: http://ensky.tw/FriendMining/');
-          exit;
-      }
-  }
-?><!doctype html>
+<!doctype html>
 <html lang="zh_tw" xmlns:fb="http://ogp.me/ns/fb#">
 <head>
   <meta charset="utf-8">
@@ -44,7 +37,7 @@
                   <label style="display:inline"><input type="radio" name="since" value="forever">抓完所有塗鴉牆訊息</label>
                 </p>
                 <p>
-                  抓誰的塗鴉牆
+                  抓誰的塗鴉牆 / 按讚的專頁
                   <select id="wall-source">
                     <option value="me">我</option>
                   </select>

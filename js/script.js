@@ -320,11 +320,11 @@ var EFB = function () {
   }
 
   var init = function () {
-      FB.api('/me?fields=id,friends', function (d) {
+      FB.api('/me?fields=id,friends,likes', function (d) {
           window.wallID = d.id;
-          var f = d.friends.data;
+          var friendsOrLikedPages = d.friends.data.concat(d.likes.data);
           var $new_wall_source = $('<select id="wall-source"><option value="'+ d.id +'" selected="selected">我</option></select>');
-          _.each(f, function (row) {
+          _.each(friendsOrLikedPages, function (row) {
               Friends.kid[row.id] = row.name;
               Friends.kname[row.name] = row.id;
               $new_wall_source.append('<option value="'+ row.id+ '">'+ row.name +'</option>');
