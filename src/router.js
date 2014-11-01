@@ -37,7 +37,6 @@ define(['efb'], function (EFB) {
     }
   }),
   router = new WorkspaceRouter;
-  window.Router = router;
   Backbone.history.start();
   return router;
 })

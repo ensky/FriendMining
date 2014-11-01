@@ -17,10 +17,6 @@ require [\efb, \router, \plugin/fbSDK, \plugin/marked] (EFB, router) !->
         $ '#login-btn' .click !->
             FB.login (response) !->
                 if response.authResponse
-                    FB.api '/me?fields=id', (d) !->
-                        window.wallID := d.id
-                        window.myID := d.id
-
                     router.isLogin = true
                     EFB.init()
                     router.navigate("#/main");
