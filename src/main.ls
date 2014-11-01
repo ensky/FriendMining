@@ -19,7 +19,7 @@ require [\efb, \router, \plugin/fbSDK, \plugin/marked] (EFB, router) !->
                 if response.authResponse
                     router.isLogin = true
                     EFB.init()
-                    router.navigate("#/main");
+                    router.navigate \#/main
                     $ '.display-when-login' .show()
                 else
                     console.log 'User cancelled login or did not fully authorize.'
