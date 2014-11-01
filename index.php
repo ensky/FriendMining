@@ -128,11 +128,13 @@
 + BackBone.js => for router
 + Showdown.js => 本help頁面
 + Chosen => 朋友塗鴉牆選擇
++ Require.js => 專案AMD管理
 
 ### 你還會更新嗎？
 看情況，我哪天心血來潮會寫一下
 
 想要增加什麼功能可以在下面留言板許願喔!
+PS: 刪除好友的功能FB沒開放所以辦不到
 
 ### 開發紀錄
 + v0.6 - add 找出沒有在follow你的朋友
@@ -222,15 +224,15 @@
 </script>
 
   <div id="fb-root"></div>
-  <script type="text/javascript" src="js/lib/jquery.min.js"></script>
-  <script type="text/javascript" src="js/lib/jquery-ui.min.js"></script>
+  <script src="js/lib/require.min.js"></script>
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/lib/jquery-ui.min.js"></script>
   <script src="js/lib/bootstrap.min.js"></script>
   <script src="js/lib/underscore-min.js"></script>
   <script src="js/lib/backbone-min.js"></script>
   <script src="js/lib/showdown.min.js"></script>
   <script src="js/lib/chosen.jquery.min.js"></script>
-  <script type="text/javascript" src="js/plugins.js"></script>
-  <script type="text/javascript" src="js/script-1.3.js"></script>
+  <script type="text/javascript" src="js/script.js"></script>
   <script type="text/javascript">
 
   var _gaq = _gaq || [];

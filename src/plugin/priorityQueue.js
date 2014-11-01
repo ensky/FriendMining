@@ -1,5 +1,5 @@
 // PriorityQueue
-(function() {
+define([], function () {
     /**
      * @private
      */
@@ -22,7 +22,7 @@
      *
      * @param [options] If low is set to true returns lowest first.
      */
-    PriorityQueue = function(options) {
+    var PriorityQueue = function(options) {
         var contents = [];
 
         var sorted = false;
@@ -162,31 +162,6 @@
 
         return self;
     };
-})(); 
 
-var marked = function () {
-    var converter = new Showdown.converter();
-    return function (html) {
-        return converter.makeHtml(html);
-    };
-} ();
-
-$('.marked').html(marked($('.marked').html()));
-
-$('i.icon-minus').live('click', function () {
-    var fold = $(this).attr('data-fold');
-    if (fold && fold.length != 0) {
-        var obj = $("#"+fold);
-        obj.slideUp();
-        $(this).attr('class', 'icon-plus');
-    }
-});
-
-$('i.icon-plus').live('click', function () {
-    var fold = $(this).attr('data-fold');
-    if (fold && fold.length != 0) {
-        var obj = $("#"+fold);
-        obj.slideDown();
-        $(this).attr('class', 'icon-minus');
-    }
+    return PriorityQueue;
 });
