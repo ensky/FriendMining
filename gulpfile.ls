@@ -26,7 +26,6 @@ gulp.task \scripts, [] ->
 
 gulp.task \libs, [\clean] ->
   gulp.src paths.libs
-    .pipe uglify()
     .pipe gulp.dest 'js/lib'
 
 gulp.task \watch ->
