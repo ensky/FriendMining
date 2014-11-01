@@ -3,7 +3,6 @@
  * Licence: http://creativecommons.org/licenses/by-nc-sa/3.0/
  */
 define(['plugin/priorityQueue'], function (PriorityQueue) {
-  window.isLogin = false;
   var EFB = function () {
     var until, since, until_this_round, grab_limit;
     var loadingCount, stop_loading;

@@ -21,7 +21,7 @@ require [\efb, \router, \plugin/fbSDK, \plugin/marked] (EFB, router) !->
                         window.wallID := d.id
                         window.myID := d.id
 
-                    window.isLogin := true
+                    router.isLogin = true
                     EFB.init()
                     router.navigate("#/main");
                     $ '.display-when-login' .show()

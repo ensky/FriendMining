@@ -1,5 +1,7 @@
 define(['efb'], function (EFB) {
   var WorkspaceRouter = Backbone.Router.extend({
+    isLogin: false,
+
     routes: {
       "" : "index",
       "main": "main",
@@ -9,7 +11,7 @@ define(['efb'], function (EFB) {
 
     main: function () {
       $(".page").hide();
-      if (isLogin) {
+      if (this.isLogin) {
         EFB.render();
         $('#page-main').show();
       } else {
@@ -20,7 +22,7 @@ define(['efb'], function (EFB) {
 
     user: function(id) {
       $(".page").hide();
-      if (isLogin) {
+      if (this.isLogin) {
         EFB.render_user(id);
         $("#page-user").show();
       } else {
@@ -35,6 +37,7 @@ define(['efb'], function (EFB) {
     }
   }),
   router = new WorkspaceRouter;
+  window.Router = router;
   Backbone.history.start();
   return router;
 })
