@@ -1,33 +1,35 @@
 define [\efb], (EFB) ->
-  WorkspaceRouter = Backbone.Router.extend do
-    isLogin: false
+	AppRouter = Backbone.Router.extend do
+		isLogin: false
 
-    routes: do
-      "" : "index"
-      "main": "main"
-      "user/:id":   "user"
-      "help": "help"
+		routes: do
+			"" : "index"
+			"main": "main"
+			"user/:id":	 "user"
+			"help": "help"
 
-    main: ->
-      $ ".page" .hide()
-      if @isLogin
-        EFB.render()
-        $ \#page-main .show()
-      else
-        $ \#page-index .show()
-        router.navigate ''
-    user: (id) ->
-      $ ".page" .hide()
-      if @isLogin
-        EFB.render_user id
-        $ \#page-user .show()
-      else
-        $ \#page-index .show()
-        router.navigate ''
+	appRouter = new AppRouter
+	appRouter.on 'route:main' ->
+		$ ".page" .hide()
+		if @isLogin
+			EFB.render()
+			$ \#page-main .show()
+		else
+			$ \#page-index .show()
+			this.navigate ''
 
-    help: ->
-        $ \.page .hide()
-        $ \#page-help .show()
+	appRouter.on 'route:user' (id) ->
+		$ ".page" .hide()
+		if @isLogin
+			EFB.render_user id
+			$ \#page-user .show()
+		else
+			$ \#page-index .show()
+			this.navigate ''
 
-  Backbone.history.start()
-  router = new WorkspaceRouter
+	appRouter.on 'route:help' ->
+		$ \.page .hide()
+		$ \#page-help .show()
+
+	Backbone.history.start()
+	return appRouter
